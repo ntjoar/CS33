@@ -1,2 +1,2 @@
 # CS33
-My solutions for CS33 taken with Professor Glenn Reinman in Spring 2019. Please use as reference only.
+These are my projects for Computer Science 333 with Professor Glen Reinman in Spring 2019. Please use as reference only.
