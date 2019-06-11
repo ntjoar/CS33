@@ -1,0 +1,712 @@
+CS33 Notes
+
+Watch the videos before the lectures
+
+Lectures are the videos and we are responsible for it
+
+The book is a backup resource; use it to support things from the book
+
+Labs are to show you as much as possible on the tests
+
+CCLE is the main resource, no other website 
+
+CampusWire for the forum
+
+Midterm 20%
+Final 35%
+Labs 10% * 4
+Homework 5% Total
+
+First lab is due Friday
+
+SEAS machine is the one that this code will be tested on
+We can use our own machines to test and debug
+
+IA32 & x86-64 will be covered in this class
+
+Compilation System
+#include<stdio.h>
+int main() {
+	printf("hello, world\n")
+}
+
+hello.c->Preprocessor(cpp)->hello.i->Compiler(cc1)->hello.s->Assembler(as)->hello.o+printf.o->Linker(ld)->hello
+
+Bits and bytes
+
+Byte = 8 bits
+Binary is just data, you don't know what we are looking at specifically
+
+Hex - 2 decimals are one byte
+0x hex
+0b bin
+
+ASCII
+We will have the ASCII table for us on the test (Not Extended)
+
+& - AND
+| - OR
+~ - NOT
+^ - XOR
+
+Logic operators in C
+
+&&, ||, !
+
+View 0 as false
+anything nonzero is true
+Return 0 or 1
+Early terminiation
+
+Logical vs bitwise analysis is different 
+	Logical converts binary first
+		Checks for nonzero
+	Bitwise Checks for both
+
+Shift  operations  
+	x << y 
+		Shift bit-vector x left y positions
+		Throw away extra bits on left
+		Apply zeroes on  the right
+	x >> y
+		Logical
+			Shift bit-vector x right y positions
+			Throw away extra bits on right
+			Apply zeroes on the left
+		Arithmetic
+			Replicate most significant bit on the left
+	Undefined Behavior
+		Shift < 0 or >= word size
+
+Integers
+	We use Unsigned and 2s complement (signed) integers
+		Unsigned integers is just normal formatting binary, nothing needed
+		Signed integers are re[resented in the format of the uppermost bit being treated with a negative in the most significant bit
+			For signed, it is two's complement
+
+Largest value in unsigned is 255 i.e. 0b11111111
+In two's complement go from -128 to 127 i.e. 0b10000000
+
+4 bits unsigned  0 -> u_(max)
+4 bits signed    -2^(n-1) -> 2^(n-1) - 1
+Remember circular design from M51A
+Casting between signed and unsigned may result in undefined behaviour
+
+3-5u > 0 <- u is unsigned here == TRUE
+	Evaluation here is unsigned becuase unsigned exists
+
+3-5 > 0 == FALSE
+
+x + ~x == 111111...1 == -1
+~x + 1 == -x 
+
+Unsigned is easier to make mistakes
+
+We order things using big endian vs little endian
+	Systems store one byte per mem address
+
+Big Endian
+	Stored with MSB first
+	If only one needed, store first
+Little Endian
+	Stored with MSB last
+	If only one needed, stored last
+
+Integer puzzles
+	x < 0 -> ((x * 2) < 0) No, since overflow may occur
+	ux >= 0 True
+	x & 7  == 7 -> x << 30 < 0, No since this does not mean that x is 8, only means it has 111 lower bits set
+	(x << 30 ) < 0,  yes, since 000...0111 shift left 30 will be 11...0, and signed so < 0
+	ux > -1 false, -1 is interpreted as a bit pattern, which is UMax, u is  unsigned so unsigned comparison is made
+	x > y -> -x < -y Since the signed is asymmetirc, no, Tmin =  Tmax + 1, so if we have x, has Tmin, to rep for -Tmin
+	x * x  >= 0 Not always, overflow
+	x > 0 && y > 0 -> x + y > 0 Not always, overflow
+	x >= 0 -> -x <= 0, True
+	x <= 0 -> -x >= 0, False, we cannot represent all postive -Tmin (Asymmetry)
+	(x | -x) >> 31 == -1 not always, 0 is exception
+	ux >>  3 == ux/8 true
+	x >> 3 == x/8 No, because negative would round incorrectly
+	x & (x - 1) != 0, False, 010000...0 (also if x = 0)
+							 001111...1
+							 __________
+							 000000...0
+
+Everything will be  on CCLE
+Campus Wire is the course discussion
+Class is based around C, not C++
+Must test on lnxsrv
+
+Arithmetic operation is done on each bit
+Logical operation is done on the number as a whole
+
+RIP
+Fixed Length
+	32-bit fixed
+Variable length
+	Can take  multiple bit length instructions
+	Saves space
+
+Op codes
+	Operands
+	Add is a two operand instruction
+
+Two address code vs Three address code
+	Two may have some extra steps
+	Three may take less steps
+
+Computer science boils down to trade-offs
+
+Register files are multiplexers
+	4-bit in, choose from 16-bit output 64-bit
+		Output based on register
+		Number of registers is 2^(input bits)
+	Indirection
+	Can store more than just one value
+
+
+LITERAL, CONSTANT, IMMEDIATE
+
+$ - immediate, use it as a LITERAL
+	Moves literal into immediate
+% - Register specifier
+
+
+MOV	
+	It doesn't move something
+	It copies it
+	MOVQ SRC, DEST
+		64-bit moving
+		Can be immediate, source or memory
+			Cannot be memory to memory move to register first
+ADD
+
+Registers are sometimes flexible
+
+Upper 32 bits shift to lower bits
+If I want the last 32-bits use rax
+
+Byte -  8-bits
+Word - 16-bits
+Long - 32-bits
+Quad - 64-bits
+This is inconsistent sometimes
+
+D + R[R_B] + R[R_S] * SF
+	Specifies one operand 
+
+Dissassembler
+objdump -d sum
+
+LEAQ vs MOVQ
+	LEAQ is 3-address code
+	MOVQ is 2-address code
+
+salq  - shift
+imulq - multiplication
+leaq  - address computation
+
+Bomb lab will likely be what does this for us
+Start reading and doing problems on tracing this type of problem
+
+CLTQ - Specific version of move
+	Sign extension 
+	MOVSLQ
+	Does it implicitly
+
+Complex instruction set computer
+	x86 due to lack of memory efficiency
+Reduced instruction set computer
+
+Addressing mode
+	RIP
+	
+3 byte instructions starting at 512
+->512
+  513
+  514
+->515
+
+CF - Carry out
+ZF - Zero
+SF - Less than 0
+OF - Overflow
+
+cmpq Src2, Src1
+	cmpq b, a == b - a
+	Check flags
+
+Flags are raised by boolean logic
+
+testq Src2, Src1
+	testq b, a == a&b
+
+jX is jumping
+
+rip tells us what instruction to execute next
+
+branching - control flow
+
+if branch T and NT if/else
+if branch has T, like goto/return
+
+val = Test ? Then_expr : else_expr
+Don't do goto unless you want to see something similar to assembly
+
+rip cnages if there is a jump instruction
+gcc -Og -S -fno-if-conversion ?[A-Za-z0-9]?.c
+
+Return instruction does not return a value 
+Procedure does that
+
+Jump table 
+	An array of addresses to jump to that are available
+Switch statements is comparison and jumps
+indirect jump 
+	The jump relies on a value
+	jmp *.L4(,%rdi,8) # goto *JTab[x]
+	    ^
+	    Dereference
+Jumping direct with a label directly
+Indirect jumps use a jump table 
+	One address takes a full byte to store
+
+Given a jump table, what variables are needed
+How does a jumptable work?
+	Level of indirection with actual addressing
+
+Look at page 180 for supporting information on Registers
+
+TA: Nishant Gupta
+	OH: Friday,   16:00-18:00
+LA: Shirly
+	OH: Tuesday,  12:30-13:30
+		Wednsday, 13:00-14:00
+
+Registers 
+	x86-64 contains 16 general purpose registers
+		r-64
+		e-32
+
+Assembly
+	AT&T
+		[op][src][dest]
+	x86
+		[op][dest][src]
+
+MOV_ move data from src to destination
+
+Suffix mismatch won't work
+
+Stack
+	Pointer is %rsp
+	push and pop
+	%rsp stays pointed to the top
+
+Caller v. Callee
+	Caller state and callee state differs
+
+callq - caller
+
+Caller saved is rax, rdi, ... r9, r10, r11
+	rax - return value
+	rdi, ..., r9 - arguments
+	r10, r11
+
+Push callee to stack
+Test is not saved other than in conditional codes
+callq runs <lineAddr> <name>
+
+Callq
+	pushes return address
+	jump to procedure
+
+RETQ
+	Pops return addressd
+
+rbx, r12-14
+	callee saved
+
+Red - statically sized, nested array
+	Contiguous space  and has multiple levels continually
+	Think lay out like 2 x 2 rather than 2 x 1
+Blue - dynamically sized, nested array
+	blue[i*n+j]
+green - statically sized, multilevel array
+
+Multilevel
+	Implies first level array has pointer to other level
+Nested
+	Contiguous space
+
+Caller
+	Registers stores first 6 values
+	rax stores return
+	
+Callee
+
+Midterm 4/29
+	Moore 100 and Broad 2160E
+
+UPE Tutoring Session
+	4/25 6:30PM Carnesale Venice
+
+Homework 2 - Prep for midterm
+
+Bomblab - Prep for midterm
+
+GDB Tutoring Session by LAs
+	4/24 2PM Perloff 1102
+
+Everything up to here is on the midterm
+
+Bomb lab
+	We have everything we need to do the bomb lab
+	Bomb will send a signal to the server to deduct points if we blow it up
+	Use GDB
+	objdump -D > *.txt
+	Don't do a brute force approach
+		Not helpful for assembly
+
+Attack lab
+	Third lab but will not be on our midterm
+
+Union allocation
+	Saves space compared to struct
+	Allows for stacking on top of memory? How if you use all three parts of the union?
+	Alignment exists
+
+Don't use gets but use fgets
+
+System level protection can help with more security
+	Creates difficulty
+	Random space on the stack
+
+Create executable and non-executable for codes
+	Only helps with injections
+
+Another helpful solution is to use a gadget
+In the stack, use the gadget ret address to start
+Attack lab will help you understand what we talked about
+Test is open book, open note
+
+(-1)^s M 2^(E)
+	s - Signed bit
+	M - Significand
+		Normalized (1.Frac)
+		Denormalized (0.Frac)
+		Special 
+			Infinity
+			Nonexistant
+	E - Exponent
+		Bias
+		Exp
+
+Denorms include values closes to zero  and zero itself
+Relisten to this lecture
+
+x == (int)(float) x FALSE, 32-bit for int and 24-bit for floating
+x == (int)(double) x TRUE, enough pace exists
+f == (float)(double) f TRUE, all  fields  can hold that value, but don't do conversions vice versa
+d == (double)(float) d FALSE, opposite of above
+f == -(-f) TRUE
+2/3 = 2/3.0 
+d < 0.0  ==> ((d*2) < 0.0) FALSE, will become -∞
+d > f    ==> -f > -d 
+d * d >= 0.0 TRUE
+(d+f)-d == f FALSE due to precision
+
+Associativity between order of operations matter during addition and subtraction
+Mult may matter
+
+Our test will have little endian
+Jump tables
+	Table of pointers
+	In the code segment
+
+Single precison: 32-bits
+Double precision: 64-bits
+Extended precison: 80-bits  (Intel only)
+
+Precision
+	sign 1-bit
+	Exponent 8/11/15-bits
+	Fraction 23/52/63 or 64-bits
+	With respect to precision
+
+Complexity in the harwarde 
+Compiler does not know what we are running on
+Compiler does not adapt to data, it adapts to the wole program
+
+Latency is how fast to do something
+	Throughput of the machine may be high
+
+There is register pressure and trade-off with how much code we can move around
+Branches make it hard for compiler to optimize
+Aliasing is reference to memory
+
+Branches 
+	Add, mult, jne
+
+Procedure calls
+
+Dynamic linked libraries
+
+Delinquent load - loads that miss cache
+
+Code notation
+	Latency
+	Loop if while loop has a variable that does not change and it is doing something
+	Compiler will figure this out but won't during procedure call
+
+Inlining - static linking
+ILP - Instruction level Parallelism
+Loop unrolling
+	More instruction memory  used
+	Efficiency goes up
+
+Front end to back end
+	Back end is doing every operation
+		Flow of data
+	Front end does Branch duration
+		Flow of instructions
+
+SISD
+	Single instruction, single data
+	Cannot have any EXPLICIT parallelism
+	Can simulate ILP
+		Instruction level parallelism
+MIMD
+	Multiple instruction, multiple data
+		Mutliple threads of execution
+		Threads have different register files
+		They are working on different data, but could work together
+	Has parallel
+	Complex hardware
+
+Macroop fusion
+	Compacting things
+
+Parallel programming 
+	Gives you efficiency
+	Each core can do the same thing each with its own core to support
+	Best cores for GPUs is regularized
+
+SIMD
+	Single instruction, multiple data
+	Simplifies hardware
+	Loses flow of instruction control
+	DLP
+
+SSE (Cisco?)
+	Streaming SIMD Extensions
+	MMX
+		a single instruction, multiple data (SIMD) instruction set designed by Intel
+
+ILP vs TLP vs DLP
+	TLP (Thread level parallelism)
+		Threads seperated
+		Programmer finds parallelism
+	ILP (Instruction level parallelism)
+		Instructions seperated
+		Hardware finds the parallelism
+	DLP (Data level parallelism)
+		Operate at the same time
+		Working on different data points
+
+Branch prediction
+	Processor clock is doing really well
+	Power density has increased
+
+Bus interface
+	Communication interface to go off chip
+	Bridge is an interconnect communication
+	I/O bus has a  lot of things hanging off it
+	CPU initiates disk read by  writing command, logical block number and destination mem address to a port associated with a disk controller
+	DMA is what we have today
+		When DMA finishes, it gives CPU an interrupt pin
+		This tells it to allow CPU to open access to the data
+		
+Memory mountain
+	Fully associative buffer means you can put anywhere
+
+Large enough cannot fit into cache
+
+n x n matrix means that we can store in cache one matrix row in one cache space via pointers
+Always go by rows, so that we can keep using cache 
+	Column traversal cause miss before we use the values
+
+Midterms will be ready tomorrow at 9am
+Attack lab
+
+Parallel lab
+	Optimize unoptimized code
+	Run through without parallelization
+	Conservatively low target
+
+Two rooms for the final
+	Possibly the same rooms
+	Keep following the alphabetical breakdown
+
+Parallelism
+	Register A
+	Register B
+
+Across CPUs, they will have different registers, different stacks, but it can share access to one file
+You can have it so they share single memory or share partitioned memory
+	With partitioning, we have consistency, memory is scaled
+		Consistency is capable through synchronization and communication
+	With sharing, cores share one single memory (no scale-up), but interprocess communication becomes better and shared data becomes better
+
+When there is a block in cache, there is one directory that stores what state and which core has access to that block
+	Shared - One or more has it
+	Unavailable - no one has it
+How do I ensure consistency of memory?
+
+OpenMP
+	Allows incremental parallelism
+	Allows low set of commands
+	Allows for more errors than pthreads
+	Pragma - preprocessor code
+
+#pragma omp parallel -> Forking, makes multiple threads and runs the same thing on processor
+#pragma omp for -> Assign different parts of a for loop to a thread -> must be deterministic at runtime
+#pragma omp single -> static, sets work sharing where one thread does everything
+#pragma omp parallel // outside the for loop -> fork one time on the outer loop, don't do it multiple times in the loop
+#pragma omp sections -> Divides code blocks between sections
+	With #pragma omp parallel sections, we have breakup and resplit per section
+nowait -> Don't delay similar to sleep
+private(...) -> Hide these variables from other threads
+critical -> Specifies that code is only be executed on one thread at a time.
+reduction(OP:varName) -> Reductions, tells the code it has to read and wait until prev thread is done with that variable
+lock-> mutex and semaphores
+cmp_set_num_threads (NUM); -> Sets number of threads to allocate
+omp_get_num_procs() -> Returns the number of processors that are available when the function is called.
+
+
+Fork join model
+	Single thread -> Forked -> Joined
+	Splitting threads into more threads
+
+Domain decomposition
+	Area should be overweighing the perimeter
+	Data associated with a problem is decomposed
+	Each parallel task then works on a portion of the data
+Function decomposition
+	Focus is on the computation that is to be performed rather than on the data manipulated by the computation
+	The problem is decomposed according to the work that must be done
+	Each task then performs a portion of the overall work
+Pipelining
+	Successive steps of an instruction sequence are executed in turn by a sequence of modules able to operate concurrently
+	Another instruction can be begun before the previous one is finished
+
+Deterministic
+	No breaks
+	No continues
+	No chainging the loop counter
+
+Set pragma commands prior to the loop
+Overhead can happen when we have threads running unevenly
+
+Multiple memory partitioning (dynamic) -> Takes a lot of overhead 
+Split memory per core (static) -> Quick and easy
+Guided approach -> Split in large chunks; split to smaller and smaller until one thread does one
+This is on partitions
+Deadlock is when there is an unfavorable lock of resources
+Race condition - undesirable situation that occurs when a device or system attempts to perform two or more operations at the same time, but because of the nature of the device or system, the operations must be done in the proper sequence to be done correctly
+Mutual exclusion - Using blocking to protect read-write
+
+Work sharing - If we have a few loops, we can loop unroll the sequences (for, single, section)
+Mutual exclusion - If we share memory, we need a way to protect data sometime (critical, lock)
+
+Optimizations we covered
+Paralllelism -> What is wrong
+Cache accessing -> Not resp. for hardware but we are for cache accessing optimization
+
+Exceptions
+	Async-external event that changes the control flow (i.e. it is not an event in the normal pipeline)
+		Interrupt-signal that notifies the processor that something is up
+	Sync
+		Traps-It was intended and OS handles the instructions. OS then passes instruction control to next
+		Faults-Fault is when there is a problem that compiler can't solve on its own because the programmer or operator had an input error->terminates the program
+			Can be recoverrable -> restores the control back to the CPU so that there is no holdup when the CPU gets confused on an instruction
+		Aborts-
+
+CPU and RAM run at different rates
+Internal vs external events
+
+Exceptions are things that don't happen a lot
+	Async is external event
+		Disk event
+		Keyboard event
+		Networking events
+
+App -> OS -> ISA
+		  -> Disk
+
+App
+Add
+Move
+Lea
+SysCall->Handler from OS
+
+EIS
+
+Interpostitioning
+
+Page offset is the offset that helps tell us which exact bit we want
+Upper bits is a  virtual page number
+
+RISC v. CISC
+
+RISC
+	Reduced
+	MIPS
+
+CISC
+	x86-64
+	Complex instruction second cue
+
+OP RS RS RD SA F
+6  5  5  5  5  6
+
+Difference is that destination is first in MIPS
+j types have a 6-op | 26-immediate
+
+MIPS is not writing the code the ground up
+	MIPS will be like the hw
+	
+Exam is Sunday
+Tentatively 7 questions
+
+Load reads from one register and writes to another
+Register value at a0 
+
+load in MIPS moves memory to register
+	Key word moves
+
+Test
+	7 Questions
+		1st - fill in the blank style question (with word key)
+		2nd - x86 to MIPS or MIPS to x86 or MIPS and we have to tell him the output
+		3rd - OpenMP
+		4th - Analysis of data structure (Bomb lab)
+		5th - Optimization without Parallelization (Set with fill in the blanks)
+		6th - Stacks Matching (Attack Lab)
+		7th - Difficult version of Bomb lab
+	No C Puzzles or Floating Point, BUT floating point will show up
+
+LEAQ - use addressing mode, but won't access  memory
+MOVQ - accesses the memory
+Convert all loops to do-while
+If statements are represented as jumps
+Switch statements are essentially  jump tables
+x86-64 Procedure calls
+	CALLQ - change the rip and move current rip to stack
+	%rsp - current element at the top of the stack
+	RET - POP RIP
+	IA32 changes frames
+6 arguments
+7 arguments are on the stack
+Frame - return address is the last frame of callers
+	Then is the callee 
+	With strings, endianness does not apply
