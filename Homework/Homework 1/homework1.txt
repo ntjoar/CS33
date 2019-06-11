@@ -1,0 +1,16 @@
+Homework 1
+Nathan Tjoar
+005081232
+2.71
+a. The code given cannot take into account a negative input, as it will run into the issue of running overlap once past its range.
+b. Please see the code below:
+int xbyte(packed_t word, int bytenum) {
+	return (word << (24 - (bytenum << 3))) >> 24;
+}
+
+2.82
+A. Incorrect at x = INT_MIN
+B. True, if we consider the fact that (x+y)<<4+y-x==17y+15x is simply 16x+16y+y-x
+C. True, use distributive property  to get that ~x+~y+1=~(x+y). Here, notice -x=~x+1 ==> -1-x=~x ==> -1+(~x+1)+(~y+1)==~(x+y)
+D. True, if  we use that -(unsigned)(x-y) is simply (unsigned)(y-x). After getting unsigned notation, we see that this is true
+E. True, the only time this is concerning will be at INT_MIN and INT_MAX, which the < sign will apply in.

@@ -1,0 +1,16 @@
+Homework 2
+Nathan Tjoar
+005081232
+
+Starting at 0x7fffffffe000, we start with the fact that this is a 3 dimensional array. 
+We want to get the value at magic8ball[3][4], so we start with index 3. Because it is first index, we start by doing 3 * 8 * 8 = 192.
+Then, we get the second value which is at index 4. There, we can do 4 * 8 + 192 = 224.
+Converting to hex, we get 0xe0. We add this to the initial address to get 0x7fffffffe0e0. 
+The chars stored at that address are: 
+0x57 0x72 0x6f 0x6e 0x67 0x00 0x00 0x00
+
+Using the ASCII table, we get
+W r o n g nul nul nul
+
+Which outputs:
+Wrong

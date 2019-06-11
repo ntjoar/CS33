@@ -1,0 +1,9 @@
+Homework 5
+Nathan Tjoar
+005081232
+
+1. The value of i is: 2
+
+2. Worst case scenario here is:
+E. jyix
+Reason is that we access and overwrite cache once we have too many addresses rather than just accessing and utilizing hits.

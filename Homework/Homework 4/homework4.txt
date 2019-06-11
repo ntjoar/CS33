@@ -1,0 +1,62 @@
+Homework 4
+Nathan Tjoar
+005081232
+
+6.45
+void transpose(int *dst, int *src, int dim) {
+	int i, j;
+	int limit = dim;
+	for(i = 0; i < limit; i += 16) {
+		int adr0 = i*limit;
+		int adr1 = (i+1)*limit;
+		int adr2 = (i+2)*limit;
+		int adr3 = (i+3)*limit;
+		int adr4 = (i+4)*limit;
+		int adr5 = (i+5)*limit;
+		int adr6 = (i+6)*limit;
+		int adr7 = (i+7)*limit;
+		int adr8 = (i+8)*limit;
+		int adr9 = (i+9)*limit;
+		int adr10 = (i+10)*limit;
+		int adr11 = (i+11)*limit;
+		int adr12 = (i+12)*limit;
+		int adr13 = (i+13)*limit;
+		int adr14 = (i+14)*limit;
+		int adr15 = (i+15)*limit;
+		for(j = 0; j < limit; j += 16) {
+			int adrJ0 = j*limit + i;
+			int adrJ1 = (j+1)*limit + i+1;
+			int adrJ2 = (j+2)*limit + i+2;
+			int adrJ3 = (j+3)*limit + i+3;
+			int adrJ4 = (j+4)*limit + i+4;
+			int adrJ5 = (j+5)*limit + i+5;
+			int adrJ6 = (j+6)*limit + i+6;
+			int adrJ7 = (j+7)*limit + i+7;
+			int adrJ8 = (j+8)*limit + i+8;
+			int adrJ9 = (j+9)*limit + i+9;
+			int adrJ10 = (j+10)*limit + i+10;
+			int adrJ11 = (j+11)*limit + i+11;
+			int adrJ12 = (j+12)*limit + i+12;
+			int adrJ13 = (j+13)*limit + i+13;
+			int adrJ14 = (j+14)*limit + i+14;
+			int adrJ15 = (j+15)*limit + i+15;
+			dst[adrJ0] = src[adr0 + j];
+			dst[adrJ1] = src[adr1 + j];
+			dst[adrJ2] = src[adr2 + j];
+			dst[adrJ3] = src[adr3 + j];
+			dst[adrJ4] = src[adr4 + j];
+			dst[adrJ5] = src[adr5 + j];
+			dst[adrJ6] = src[adr6 + j];
+			dst[adrJ7] = src[adr7 + j];
+			dst[adrJ8] = src[adr8 + j];
+			dst[adrJ9] = src[adr9 + j];
+			dst[adrJ10] = src[adr10 + j];
+			dst[adrJ11] = src[adr11 + j];
+			dst[adrJ12] = src[adr12 + j];
+			dst[adrJ13] = src[adr13 + j];
+			dst[adrJ14] = src[adr14 + j];
+			dst[adrJ15] = src[adr15 + j];
+		}
+	}
+}
+
